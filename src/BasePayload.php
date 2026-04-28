@@ -70,13 +70,20 @@ abstract class BasePayload extends Model
     public function loadData(array $data, string $formName = ''): static
     {
         try {
-            $this->load($data, $formName);
+            $loaded = $this->load($data, $formName);
         } catch (Throwable $exception) {
             throw new ValidationException(
                 ['payload' => [$exception->getMessage()]],
                 'Payload load failed.',
                 422,
                 $exception
+            );
+        }
+
+        if (!$loaded) {
+            throw new ValidationException(
+                ['payload' => ['Payload data was not loaded.']],
+                'Payload load failed.'
             );
         }
 

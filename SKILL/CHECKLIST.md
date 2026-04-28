@@ -1,6 +1,6 @@
 # DNK Checklist
 
-- Установлен `andy87/yii2-dnk`, если проект использует DNK Base-слой.
+- Установлен `andy87/yii2-dnk-base`, если проект использует DNK Base-слой.
 - В проекте не создаются локальные копии `Base*` классов из пакета.
 - Доменные модели наследуют BaseModel: `Item extends ItemSource extends BaseModel extends ActiveRecord`.
 - `BaseModel` предоставляет дефолтные `attributeLabels()` для ATTR_ID/ATTR_CREATED_AT/ATTR_UPDATED_AT. Боевая модель дополняет через `array_merge(parent::attributeLabels(), [...])`. Gii-модель должна использовать `array_merge(parent::attributeLabels(), [...])` в `attributeLabels()`, иначе labels из BaseModel будут перекрыты.

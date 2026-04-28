@@ -6,7 +6,7 @@ declare(strict_types=1);
 /**
  * Синхронизирует Cursor skill с master-source DNK skill.
  *
- * Master-source остаётся shared/yii2/dnk/SKILL.md.
+ * Master-source остаётся SKILL/SKILL.md внутри пакета andy87/yii2-dnk-base.
  * Cursor skill получает полную копию, чтобы агент не зависел от перехода
  * по относительным ссылкам и не работал с урезанным индексом.
  */

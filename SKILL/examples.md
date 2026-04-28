@@ -5,7 +5,7 @@
 Файлы используют placeholders вида `{{domainName}}`, `{{domainClass}}`, `{{modelFqcn}}`.
 Перед вставкой в проект placeholders должны быть заменены конкретными namespace, class name и FQCN.
 
-Base-уровень не копируется в проект. Все шаблоны наследуются от классов composer-пакета `andy87/yii2-dnk`.
+Base-уровень не копируется в проект. Все шаблоны наследуются от классов composer-пакета `andy87/yii2-dnk-base`.
 
 ## Группы шаблонов
 

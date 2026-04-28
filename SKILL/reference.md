@@ -1,6 +1,6 @@
 # Yii2 DNK Reference
 
-Основной источник правил: `SKILL.md`.
+Основной источник правил: `SKILL/SKILL.md`.
 
 Этот файл не дублирует полный skill, чтобы не расходиться с ним при изменениях.
 
@@ -8,17 +8,16 @@
 
 Base-уровень находится в composer-пакете.
 
-Текущий основной способ установки для этого репозитория — GitHub VCS. Пакет `andy87/yii2-dnk` не найден в публичном Packagist на 2026-04-27:
+Основной способ установки runtime-пакета — через Packagist:
 
 ```bash
-composer config repositories.yii2-dnk vcs https://github.com/andy87/yii2-dnk
-composer require andy87/yii2-dnk:dev-main
+composer require andy87/yii2-dnk-base:^0.1
 ```
 
-После публикации пакета на Packagist можно использовать стабильную версию:
+Для установки текущей ветки разработки:
 
 ```bash
-composer require andy87/yii2-dnk:^0.1
+composer require andy87/yii2-dnk-base:dev-master
 ```
 
 При генерации доменов не создавай локальные копии `Base*` классов. Наследуйся от:

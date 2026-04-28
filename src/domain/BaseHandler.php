@@ -11,6 +11,7 @@ use Throwable;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
+use yii\db\Connection;
 
 /**
  * Базовый оркестратор use-case для DNK flow.
@@ -140,11 +141,21 @@ abstract class BaseHandler extends BaseObject
      *
      * @param callable(): mixed $callback Тело транзакции.
      * @return mixed Результат выполнения callback.
+     * @throws InvalidConfigException Если компонент БД не является Connection.
      * @throws Throwable При ошибке в callback или транзакции.
      */
     protected function transaction(callable $callback): mixed
     {
         $db = Yii::$app->get($this->db);
+
+        if (!$db instanceof Connection) {
+            throw new InvalidConfigException(sprintf(
+                'Component "%s" must be instance of "%s".',
+                $this->db,
+                Connection::class
+            ));
+        }
+
         $transaction = $db->beginTransaction();
 
         try {

@@ -2,16 +2,51 @@
   "name": "andy87/yii2-dnk-base",
   "description": "Base classes for Yii2 DNK flow architecture.",
   "type": "library",
+  "keywords": [
+    "yii2",
+    "dnk",
+    "domain",
+    "handler",
+    "repository",
+    "ai-skill"
+  ],
+  "homepage": "https://github.com/andy87/yii2-dnk-base",
   "license": "MIT",
-  "minimum-stability": "stable",
-  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "andy87"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/andy87/yii2-dnk-base/issues",
+    "source": "https://github.com/andy87/yii2-dnk-base"
+  },
   "require": {
     "php": ">=8.0",
     "yiisoft/yii2": "^2.0.45"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "andy87\\yii2dnk\\": "src/"
     }
+  },
+  "scripts": {
+    "validate-package": "composer validate --strict --no-check-publish",
+    "lint": "@php scripts/lint.php",
+    "test": "@php tests/BaseDomainRegistryTest.php",
+    "check": [
+      "@validate-package",
+      "@lint",
+      "@test"
+    ]
   }
 }

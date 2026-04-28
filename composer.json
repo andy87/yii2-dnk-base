@@ -1,0 +1,17 @@
+{
+  "name": "andy87/yii2-dnk-base",
+  "description": "Base classes for Yii2 DNK flow architecture.",
+  "type": "library",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.0",
+    "yiisoft/yii2": "^2.0.45"
+  },
+  "autoload": {
+    "psr-4": {
+      "andy87\\yii2dnk\\": "src/"
+    }
+  }
+}

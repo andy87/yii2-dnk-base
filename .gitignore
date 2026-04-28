@@ -1,0 +1,9 @@
+/.idea/
+/vendor/
+/composer.lock
+/.phpunit.result.cache
+/coverage/
+/build/
+/dist/
+*.log
+*.tmp

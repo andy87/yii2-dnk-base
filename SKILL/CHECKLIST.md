@@ -1,0 +1,44 @@
+# DNK Checklist
+
+- Установлен `andy87/yii2-dnk`, если проект использует DNK Base-слой.
+- В проекте не создаются локальные копии `Base*` классов из пакета.
+- Доменные модели наследуют BaseModel: `Item extends ItemSource extends BaseModel extends ActiveRecord`.
+- `BaseModel` предоставляет дефолтные `attributeLabels()` для ATTR_ID/ATTR_CREATED_AT/ATTR_UPDATED_AT. Боевая модель дополняет через `array_merge(parent::attributeLabels(), [...])`. Gii-модель должна использовать `array_merge(parent::attributeLabels(), [...])` в `attributeLabels()`, иначе labels из BaseModel будут перекрыты.
+- Gii-модель (`ItemSource`) наследует `BaseModel`, боевая модель наследует `ItemSource`.
+- Controller тонкий: request -> payload -> handler -> response.
+- App-level `BaseHandlerController` наследует `BaseWebController`/`BaseConsoleController` из пакета и содержит только redirect/alert/helpers, не бизнес-логику.
+- Backend/frontend `BaseHandlerController` наследует common `BaseHandlerController`, а не использует trait.
+- Controller использует `{{domainClass}}::ACTION_*` вместо собственных констант.
+- Handler оркестрирует use-case и не содержит query/save/delete деталей.
+- Handler НЕ вызывает `validateOrFail()` на payload — валидация происходит при создании через `BaseDomain::createPayload()`.
+- Handler НЕ проверяет null после service-вызовов — Service использует `findOrFail()` и выбрасывает `NotFoundException`.
+- Service содержит бизнес-сценарии и не читает request.
+- Service::search() добавлен только для list/index/search сценариев и возвращает `ActiveDataProvider`. SearchModel доступна через `$this->getSearchModel()` — публичный метод (прокси к `BaseActiveDataProvider::getSearchModel()`).
+- Service::getDataProvider() используется только если в registry задан `$dataProvider`; кэширует builder — повторный вызов возвращает тот же экземпляр.
+- Service::getRepository(), getProducer(), getKiller() также кэшируют экземпляры — повторный вызов возвращает тот же объект.
+- Service::getById() использует `BaseRepository::findOrFail()` — canonical способ получить модель или выбросить исключение.
+- Repository только читает и строит query. `applyCriteria()` имеет унифицированную сигнатуру с `$criteria = []`.
+- Producer создает runtime-модели, search-модели и новые записи; generic update не вызывается.
+- Producer::fillModel() использует safe-присвоение по умолчанию. `fillModelUnsafe()` — для доверенных системных данных.
+- Producer::createFormModel() используется для полного Yii ActiveForm POST и не сохраняет модель.
+- Killer только удаляет или выполняет soft delete.
+- Payload выделен под конкретное действие; ViewModel/Resource выделен только для action-ов, которым нужен объект ответа.
+- Один payload-класс используется только для одного action.
+- Каждый payload-класс в отдельном файле (PSR-4: один класс = один файл).
+- Payload имеет rules(), если сценарий зависит от входной валидации.
+- Domain содержит registry через protected typed properties, mapping `$payloads` и optional mapping `$viewModels`.
+- Domain не `final`, если нужны dev/mock/playground-подмены через наследование и Yii DI mapping.
+- Для CRUD action ID используются константы BaseDomain::ACTION_* вместо строковых литералов.
+- `$searchModel` и `$dataProvider` обязательны только для list/index/search сценариев. Если домен не имеет index/search, эти properties остаются `null`.
+- IndexResource содержит searchModel и готовый ActiveDataProvider для Gii-like GridView.
+- Create/Update/View resources используются в соответствующих view-шаблонах.
+- `$queryStorage` указан в Domain registry, если есть нативные SQL-запросы (опционально).
+- QueryStorage возвращает SQL + params, без конкатенации пользовательских значений.
+- QueryStorage явно указывает `protected const DOMAIN = SomeDomain::class`; это pointer на Domain, не registry и не `CLASSES/PAYLOADS/VIEW_MODELS`.
+- Доменный DataProvider реализует search(); BaseActiveDataProvider не делает generic search.
+- SearchModel грузит фильтры через стандартный formName, совместимо с Gii GridView.
+- `BaseWebController::display()` рендерит `BaseTemplateResource` как HTML, `BaseResource` и другие `BaseViewModel` — как JSON.
+- Кастомные response-сценарии вынесены в методы конкретного controller.
+- Generic scaffold-шаблоны не содержат обязательных полей (status, created_at, updated_at). Доменные колонки добавляются явно.
+- Config overrides в `$definitions` допустимы только для инфраструктурной конфигурации (Handler db, DataProvider pageSize/criteria, Repository queryStorage, QueryStorage db). Repository queryStorage задаётся как object/class-string/Yii object definition. Не передавай через registry request/body/business data и не задавай top-level `$definitions[$key]['class']`; вложенный Yii definition для `queryStorage` может содержать `class`.
+- Legacy `CLASSES/PAYLOADS/VIEW_MODELS` используются только для fallback, не для нового scaffold-кода.
